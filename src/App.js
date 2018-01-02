@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+import SimpleLineChart from './chart'
 import {BitcoinAPI} from './BitcoinAPI'
 
 class App extends Component {
@@ -29,6 +29,10 @@ class App extends Component {
       })
 
     this.interval = setInterval(() => {
+
+      // var history = {   Ripple: this.convertToRipple() }; let historical =
+      // this.state.historical; historical.push(history); this.setState({historical});
+
       this
         .state
         .coins
@@ -58,25 +62,27 @@ class App extends Component {
 
   // componentDidMount() { }
 
+  
   componentWillUnmount() {
     clearInterval(this.interval);
     clearInterval(this.loadingTimer);
   }
-
+  
   shouldComponentUpdate() {
     let date = Date.now();
     return this.state.time !== date;
   }
-
+  
   render() {
+    const totalXRP = 1054.94;
     let coins = this.state.coins;
     let ltc = coins.find(x => x.name === "LTC");
     let eth = coins.find(x => x.name === "ETH");
     // let xrp = coins.find(x => x.name === "XRP");
 
     const gatherTotalCoins = () => {
-      return (eth && ltc)
-        ? (eth.BTC + ltc.BTC)
+      return (ltc)
+        ? (ltc.BTC + 0.06039446 + (191.80800000 * xrp().BTC))
         : 0;
     }
 
@@ -106,8 +112,8 @@ class App extends Component {
     }
 
     return (
-      <div className="App row container">
-        <div>
+      <div className="App row">
+        <div className="col-md-8">
           <table className="table">
             <tr>
               <th></th>
@@ -149,64 +155,55 @@ class App extends Component {
             </div>
           </div>
           <hr></hr>
-
         </div>
 
-        <div className="jumbotron">
-          <p>
-            ETH + LTC =
-            <b>
-              {gatherTotalCoins()}</b>
-          </p>
-          <p>
-            Gathered Coins (1 LTC + 1 ETH) with the current BTC Market Rate of XRP ({xrp().BTC}) is:
-          </p>
+        <div className="jumbotron col-md-8">
           <div>
             <label>
               <h3>
                 Ripples
               </h3>
-              <h2>
+              <h3>
                 <b>
-                  {convertToRipple()}
+                  1,054.944
                 </b>
-              </h2>
+              </h3>
+              <h3>${totalXRP * xrp().USD}</h3>
             </label>
             <br></br>
           </div>
-          <div className="row col-md-6">
-            <label>
-              Coinbase Holdings
-              <p>
-                0.011 BTC =
-                <b>
-                  {(btc().USD * 0.011) / xrp().USD}
-                </b>
-              </p>
-              <p>
-                <b>
-                  {convertToRipple() - (0.001 * convertToRipple())}
-                </b>
-                estimate after fees</p>
-            </label>
-          </div>
-          <div className="row">
-            <div className="formula col-md-6">
-              <label>
-                Formula
-                <p>
-                  ({btc().USD}
-                  * {gatherTotalCoins()}) / {xrp().USD}
-                </p>
-                <p>
-                  (Bitcoin * TotalCoins) / XRP
-                </p>
-              </label>
+        </div>
+
+        <div className="row">
+          <div className="pull-right">
+            <div className="col-md-9">
+              <h4>Initial Investment</h4>
+              <div>ETH: $714</div>
+              <div>LTC: $309</div>
+              <div>BTC: $200</div>
+              <div>BTC: $167</div>
+              <hr></hr>
+              $1390
+              <br/>
+              <hr></hr>
+              Current Profit: ${((totalXRP * xrp().USD) - 1390).toFixed(2)}
             </div>
           </div>
         </div>
-        <footer className="footer">
-          <a href="https://github.com/teachtyler" target="_blank"> teachtyler </a>
+
+        <div className="col-md-8">
+
+          <SimpleLineChart
+            data={{
+            usd: totalXRP * xrp().USD
+          }}/>
+
+        </div>
+
+        <footer className="footer col-md-8">
+          <a href="https://github.com/teachtyler" target="_blank">
+            teachtyler
+          </a>
           <br></br>
           {new Date(this.state.time).toLocaleTimeString('en')}
         </footer>
