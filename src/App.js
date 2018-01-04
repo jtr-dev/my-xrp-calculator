@@ -8,7 +8,7 @@ class App extends Component {
 
   state = {
     coins: [
-      "btc", "eth", "ltc", "xrp"
+      "btc", "eth", "ltc", "xrp", "poe"
     ],
     time: 0,
     progressBar: 0
@@ -62,19 +62,21 @@ class App extends Component {
 
   // componentDidMount() { }
 
-  
   componentWillUnmount() {
     clearInterval(this.interval);
     clearInterval(this.loadingTimer);
   }
-  
+
   shouldComponentUpdate() {
     let date = Date.now();
     return this.state.time !== date;
   }
-  
+
   render() {
     const totalXRP = 1054.94;
+    const totalPOE = 1270.728;
+
+    const totalInvestment = 1540;
     let coins = this.state.coins;
     let ltc = coins.find(x => x.name === "LTC");
     let eth = coins.find(x => x.name === "ETH");
@@ -109,6 +111,20 @@ class App extends Component {
       return (coin)
         ? coin
         : 0;
+    }
+
+    const poe = () => {
+      let coin = coins.find(x => x.name === "POE");
+      return (coin)
+        ? coin
+        : 0;
+    }
+
+    const totalProfits = () => {
+      let xrpProfit = (totalXRP * xrp().USD)
+      let poeProfit = (totalPOE * poe().USD)
+
+      return (xrpProfit + poeProfit) - totalInvestment
     }
 
     return (
@@ -159,17 +175,34 @@ class App extends Component {
 
         <div className="jumbotron col-md-8">
           <div>
-            <label>
-              <h3>
-                Ripples
-              </h3>
-              <h3>
-                <b>
-                  1,054.944
-                </b>
-              </h3>
-              <h3>${totalXRP * xrp().USD}</h3>
-            </label>
+            <div className="col-md-6">
+              <label>
+                <h3>
+                  Ripples
+                </h3>
+                <h3>
+                  <b>
+                    1,054.944
+                  </b>
+                </h3>
+                <h3>${totalXRP * xrp().USD}</h3>
+              </label>
+            </div>
+
+            <div className="col-md-6">
+              <label>
+                <h3>
+                  POE
+                </h3>
+                <h3>
+                  <b>
+                    1,270.728
+                  </b>
+                </h3>
+                <h3>${totalPOE * poe().USD}</h3>
+              </label>
+            </div>
+
             <br></br>
           </div>
         </div>
@@ -177,25 +210,25 @@ class App extends Component {
         <div className="row">
           <div className="pull-right">
             <div className="col-md-9">
-              <h4>Initial Investment</h4>
+              <h4>Investments</h4>
               <div>ETH: $714</div>
               <div>LTC: $309</div>
               <div>BTC: $200</div>
               <div>BTC: $167</div>
+              <div>ETH: $150</div>
               <hr></hr>
-              $1390
+              $1540
               <br/>
               <hr></hr>
-              Current Profit: ${((totalXRP * xrp().USD) - 1390).toFixed(2)}
+              Current Profit: ${totalProfits()}
             </div>
           </div>
         </div>
 
         <div className="col-md-8">
 
-          <SimpleLineChart
-            data={{
-            usd: totalXRP * xrp().USD
+          <SimpleLineChart data={{
+            usd: totalProfits()
           }}/>
 
         </div>
