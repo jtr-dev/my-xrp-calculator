@@ -13,7 +13,7 @@ const headers = {
 const bitcoinApi = {
 
     compareCoins: (from, to) => 
-        fetch(`${url}/price?fsym=${from}&tsyms=${to},USD`, {headers})
+        fetch(`${url}/price?fsym=${from}&tsyms=${to},USD,ETH`, {headers})
             .then(res => res.json())
             .then(data => data)
             

@@ -74,7 +74,7 @@ class App extends Component {
 
   render() {
     const totalXRP = 1054.94;
-    const totalPOE = 1270.728;
+    const totalPOE = 1323.404;
 
     const totalInvestment = 1540;
     let coins = this.state.coins;
@@ -153,6 +153,17 @@ class App extends Component {
             </tr>
             <tr>
               <th>
+                ETH
+              </th>
+              {this
+                .state
+                .coins
+                .map(coin => (
+                  <td>{coin.ETH}</td>
+                ))}
+            </tr>
+            <tr>
+              <th>
                 USD
               </th>
               {this
@@ -182,7 +193,7 @@ class App extends Component {
                 </h3>
                 <h3>
                   <b>
-                    1,054.944
+                    {totalXRP}
                   </b>
                 </h3>
                 <h3>${totalXRP * xrp().USD}</h3>
@@ -196,7 +207,7 @@ class App extends Component {
                 </h3>
                 <h3>
                   <b>
-                    1,270.728
+                    {totalPOE}
                   </b>
                 </h3>
                 <h3>${totalPOE * poe().USD}</h3>
